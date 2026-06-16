@@ -1,4 +1,4 @@
-import type { Material, SizeOption, GlazingOption, Extra } from '../types/window'
+import type { Material, SizeOption, GlazingOption, HardwareOption, Extra } from '../types/window'
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
@@ -51,6 +51,44 @@ const glazingOptions: GlazingOption[] = [
   },
 ]
 
+const hardwareOption: HardwareOption[] = [
+  {
+    id: 'hw1',
+    name: 'Standard Handle',
+    finish: 'White',
+    style: 'Standard',
+    priceAdd: 0
+  },
+  {
+    id: 'hw2',
+    name: 'Designer Handle',
+    finish: 'Silver',
+    style: 'Designer',
+    priceAdd: 45
+  },
+  {
+    id: 'hw3',
+    name: 'Designer Handle',
+    finish: 'Anthracite',
+    style: 'Designer',
+    priceAdd: 45
+  },
+  {
+    id: 'hw4',
+    name: 'Security Handle',
+    finish: 'Silver',
+    style: 'Security',
+    priceAdd: 89
+  },
+  {
+    id: 'hw5',
+    name: 'Security Handle',
+    finish: 'Anthracite',
+    style: 'Security',
+    priceAdd: 89
+  },
+]
+
 const extras: Extra[] = [
   {
     id: 'handle-premium',
@@ -92,6 +130,11 @@ export const windowApi = {
   async getGlazingOptions(): Promise<GlazingOption[]> {
     await delay(350)
     return glazingOptions
+  },
+
+  async getHardwareOptions(): Promise<HardwareOption[]> {
+    await delay(350)
+    return hardwareOption
   },
 
   async getExtras(): Promise<Extra[]> {

@@ -20,6 +20,14 @@ export interface GlazingOption {
   priceModifier: number
 }
 
+export interface HardwareOption {
+  id: string
+  name: string
+  finish: string  // e.g. 'White', 'Silver', 'Anthracite'
+  style: string   // e.g. 'Standard', 'Designer', 'Security'
+  priceAdd: number
+}
+
 export interface Extra {
   id: string
   label: string
@@ -31,6 +39,7 @@ export interface WindowConfiguration {
   material: Material | null
   size: SizeOption | null
   glazing: GlazingOption | null
+  hardware: HardwareOption | null
   extras: Extra[]
 }
 

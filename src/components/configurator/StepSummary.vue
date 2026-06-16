@@ -85,6 +85,16 @@ function handleSubmit() {
         </div>
 
         <div class="bg-gray-50 rounded-xl p-4 border border-gray-100">
+          <p class="text-xs text-gray-400 uppercase tracking-wide mb-1">Hardware</p>
+          <p class="font-semibold text-gray-800">
+            {{ configuration.hardware?.name ?? '—' }}
+          </p>
+          <p class="text-xs text-gray-500 mt-0.5">
+            {{ configuration.hardware?.finish ?? '' }}
+          </p>
+        </div>
+
+        <div class="bg-gray-50 rounded-xl p-4 border border-gray-100">
           <p class="text-xs text-gray-400 uppercase tracking-wide mb-1">Extras</p>
           <p
             v-if="configuration.extras.length === 0"

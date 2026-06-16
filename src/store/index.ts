@@ -1,5 +1,5 @@
 import { createStore } from 'vuex'
-import type { Material, SizeOption, GlazingOption, Extra, WindowConfiguration, ConfiguratorStep } from '../types/window'
+import type { Material, SizeOption, GlazingOption, HardwareOption, Extra, WindowConfiguration, ConfiguratorStep } from '../types/window'
 import { windowApi } from '../services/windowApi'
 
 export interface RootState {
@@ -14,6 +14,7 @@ const initialConfiguration: WindowConfiguration = {
   material: null,
   size: null,
   glazing: null,
+  hardware: null,
   extras: [],
 }
 
@@ -21,8 +22,9 @@ const initialSteps: ConfiguratorStep[] = [
   { id: 1, key: 'material', label: 'Material', completed: false },
   { id: 2, key: 'size', label: 'Size', completed: false },
   { id: 3, key: 'glazing', label: 'Glazing', completed: false },
-  { id: 4, key: 'extras', label: 'Extras', completed: false },
-  { id: 5, key: 'summary', label: 'Summary', completed: false },
+  { id: 4, key: 'hardware', label: 'Hardware', completed: false },
+  { id: 5, key: 'extras', label: 'Extras', completed: false },
+  { id: 6, key: 'summary', label: 'Summary', completed: false },
 ]
 
 export default createStore<RootState>({
@@ -36,18 +38,20 @@ export default createStore<RootState>({
 
   getters: {
     totalPrice(state: RootState): number {
-      const { material, size, glazing, extras } = state.configuration
+      const { material, size, glazing, hardware, extras } = state.configuration
       if (!size) return 0
       const materialMod = material?.priceModifier ?? 1
       const glazingMod = glazing?.priceModifier ?? 1
+      const hardwareMod = hardware?.priceAdd ?? 0
       const extrasTotal = extras.reduce((sum, e) => sum + e.price, 0)
-      return Math.round(size.basePrice * materialMod * glazingMod + extrasTotal)
+      return Math.round(size.basePrice * materialMod * glazingMod + hardwareMod + extrasTotal)
     },
 
     isStepComplete: (state: RootState) => (stepKey: string): boolean => {
       if (stepKey === 'material') return state.configuration.material !== null
       if (stepKey === 'size') return state.configuration.size !== null
       if (stepKey === 'glazing') return state.configuration.glazing !== null
+      if (stepKey === 'hardware') return state.configuration.hardware !== null
       if (stepKey === 'extras') return true // extras are optional
       return false
     },
@@ -77,6 +81,11 @@ export default createStore<RootState>({
     SET_GLAZING(state: RootState, glazing: GlazingOption) {
       state.configuration.glazing = glazing
       state.steps[2].completed = true
+    },
+
+    SET_HARDWARE(state: RootState, hardware: HardwareOption) {
+      state.configuration.hardware = hardware
+      state.steps[3].completed = true
     },
 
     TOGGLE_EXTRA(state: RootState, extra: Extra) {
@@ -147,6 +156,19 @@ export default createStore<RootState>({
         return options
       } catch (e) {
         commit('SET_ERROR', 'Failed to load glazing options. Please try again.')
+        commit('SET_LOADING', false)
+        return []
+      }
+    },
+
+    async fetchHardware({ commit }: { commit: Function }) {
+      commit('SET_LOADING', true)
+      try {
+        const hardwareOptions = await windowApi.getHardwareOptions()
+        commit('SET_LOADING', false)
+        return hardwareOptions
+      } catch (e) {
+        commit('SET_ERROR', 'Failed to load hardware options. Please try again.')
         commit('SET_LOADING', false)
         return []
       }

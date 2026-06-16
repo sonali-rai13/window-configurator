@@ -6,6 +6,7 @@ import PriceSummaryBar from '../components/ui/PriceSummaryBar.vue'
 import StepMaterial from '../components/configurator/StepMaterial.vue'
 import StepSize from '../components/configurator/StepSize.vue'
 import StepGlazing from '../components/configurator/StepGlazing.vue'
+import StepHardware from '../components/configurator/StepHardware.vue'
 import StepExtras from '../components/configurator/StepExtras.vue'
 import StepSummary from '../components/configurator/StepSummary.vue'
 
@@ -37,8 +38,9 @@ const stepComponents: Record<number, unknown> = {
   1: StepMaterial,
   2: StepSize,
   3: StepGlazing,
-  4: StepExtras,
-  5: StepSummary,
+  4: StepHardware,
+  5: StepExtras,
+  6: StepSummary,
 }
 </script>
 
